@@ -1,5 +1,6 @@
 /*uc8 */
-window.addEventListener('input', function(){
+window.addEventListener('DOMContentLoaded', (event) => {
+
     const salary = document.querySelector('#salary');
     const output = document.querySelector('.salary-output');
     output.textContent = salary.value;
@@ -8,7 +9,7 @@ window.addEventListener('input', function(){
     });    
 });
 
-/*uc9 */
+/**uc9 */
 class Employee
 {
     get name()
@@ -18,7 +19,7 @@ class Employee
 
     set name(name)
     {
-        const nameRegex = RegExp('^[A-za-z\\s]');
+        const nameRegex = RegExp('^[A-Z]{1}[a-zA-Z\\s]{2,}$');
         if(nameRegex.test(name))
         {
             this._name = name;
@@ -27,6 +28,16 @@ class Employee
         {
             throw "Name is incorrect";
         }
+    }
+
+    get id()
+    {
+        return this._id;
+    }
+
+    set id(id)
+    {
+        this._id = id;
     }
 
     get profileimg()
@@ -76,6 +87,19 @@ class Employee
 
     set startDate(startDate)
     {
+        let now = new Date();
+
+        if(startDate > now) 
+        {
+            throw 'Start Date is a Future Date!';
+        }
+        
+        var diff = Math.abs(now - this._startDate);
+        if (diff / (1000 * 60 * 60 * 24) > 30)
+        {
+            throw 'Start Date is beyond 30 days!';
+        }
+
         this._startDate = startDate;
     }
 
@@ -91,8 +115,10 @@ class Employee
 
     toString()
     {
-        return "id = " + this.id + ", name = " + this.name + ", salary = " + this.salary + 
-                   ", start date = " + empDate;
+        const options = {year : 'numeric', month : 'long', day : 'numeric'};
+        const empDate = this._startDate === undefined ? "undefined" : 
+        this._startDate.toLocaleDateString("en-US", options);
+        return "id = " + this._id + ", name = " + this._name + ", salary = " + this._salary + ", start date = " + empDate;
     }
 }
 
@@ -105,10 +131,11 @@ const createEmployeePayrollData = () =>{
     }
     catch(e)
     {
+        setTextValue('.text-error', e);
         throw e;
     }
 
-    employeeData.name = getInputValueById('#salary');
+    employeeData.salary = getInputValueById('#salary');
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " + getInputValueById('#year');
     employeeData.date = Date.parse(date);
     alert(employeeData.toString());
@@ -119,3 +146,41 @@ const getInputValueById = (id) => {
     let value = document.querySelector(id).value;
     return value;
 }
+
+/**uc10 */
+const name = document.querySelector('#name');
+const textError = document.querySelector('.text-error');
+name.addEventListener('input', function(){
+    if(name.value.length == 0)
+    {
+        textError.textContent = "";
+        return;
+    }
+    
+    try
+    {
+        let employee = new Employee();
+        employee.name = name.value;
+        textError.textContent = "";
+    }
+    catch(e)
+    {
+        textError.textContent = e;
+    }
+});
+
+const date = document.querySelector('#date');
+const dateError = document.querySelector('.date-error');
+date.addEventListener('input', function() {
+    const startDate = new Date(Date.parse(getInputValueById('#day') + " " + getInputValueById('#month')+" "+getInputValueById('#year')));
+    try
+    {
+        let employee = new Employee();
+        employee.startDate = startDate;
+        dateError.textContent = "";
+    }
+    catch(e)
+    {
+        dateError.textContent = e;
+    }
+});
