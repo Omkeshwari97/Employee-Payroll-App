@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });    
 });
 
-/**uc9 */
+/*uc9 */
 class Employee
 {
     get name()
@@ -116,9 +116,8 @@ class Employee
     toString()
     {
         const options = {year : 'numeric', month : 'long', day : 'numeric'};
-        const empDate = this._startDate === undefined ? "undefined" : 
-        this._startDate.toLocaleDateString("en-US", options);
-        return "id = " + this._id + ", name = " + this._name + ", salary = " + this._salary + ", start date = " + empDate;
+        const empDate = !this._startDate? "undefined" : this._startDate.toLocaleDateString("en-US", options);
+        return "id = " + this._id + ", name = " + this._name + ", gender = " + this._gender + + ", profilePic = " + this._profile + + ", department = " + this._department + ", salary = " + this._salary + ", start date = " + empDate + ", notes = " + this._notes ;
     }
 }
 
@@ -147,7 +146,7 @@ const getInputValueById = (id) => {
     return value;
 }
 
-/**uc10 */
+/*uc10 */
 const name = document.querySelector('#name');
 const textError = document.querySelector('.text-error');
 name.addEventListener('input', function(){
