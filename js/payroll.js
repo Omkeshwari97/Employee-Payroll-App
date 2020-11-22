@@ -105,7 +105,7 @@ class Employee
     {
         const options = {year : 'numeric', month : 'long', day : 'numeric'};
         const empDate = !this._startDate? "undefined" : this._startDate.toLocaleDateString("en-US", options);
-        return "id = " + this._id + ", name = " + this._name + ", gender = " + this._gender + + ", profilePic = " + this._profile + + ", department = " + this._department + ", salary = " + this._salary + ", start date = " + empDate + ", notes = " + this._notes ;
+        return "id = " + this._id + ", name = " + this._name + ", gender = " + this._gender + ", profilePic = " + this._profile + ", department = " + this._department + ", salary = " + this._salary + ", start date = " + empDate + ", notes = " + this._notes ;
     }
 }
 
@@ -113,6 +113,7 @@ const save = () =>{
     try
     {
         let employeeData = createEmployeePayrollData();
+        createAndUpdateStorage(employeeData);
     }
     catch(e)
     {
@@ -139,6 +140,7 @@ const createEmployeePayrollData = () =>{
     employeeData.salary = getInputValueById('#salary');
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " + getInputValueById('#year');
     employeeData.date = Date.parse(date);
+    employeeData.notes = getInputValueById('#notes');
     alert(employeeData.toString());
     return employeeData;
 }
@@ -158,6 +160,22 @@ const getSelectedValues = (propertyValue) => {
 const getInputValueById = (id) => {
     let value = document.querySelector(id).value;
     return value;
+}
+
+function createAndUpdateStorage(employeeData)
+{
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+
+    if(employeePayrollList != undefined)
+    {
+        employeePayrollList.push(employeeData);
+    }
+    else
+    {
+        employeePayrollList = [employeeData];
+    }
+    alert(employeePayrollList.toString());
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
