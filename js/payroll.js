@@ -1,15 +1,3 @@
-/*uc8 */
-window.addEventListener('DOMContentLoaded', (event) => {
-
-    const salary = document.querySelector('#salary');
-    const output = document.querySelector('.salary-output');
-    output.textContent = salary.value;
-    salary.addEventListener('input', function(){
-        output.textContent = salary.value;
-    });    
-});
-
-/*uc9 */
 class Employee
 {
     get name()
@@ -121,6 +109,17 @@ class Employee
     }
 }
 
+const save = () =>{
+    try
+    {
+        let employeeData = createEmployeePayrollData();
+    }
+    catch(e)
+    {
+        return;
+    }
+}
+
 const createEmployeePayrollData = () =>{
     let employeeData = new Employee();
 
@@ -134,6 +133,9 @@ const createEmployeePayrollData = () =>{
         throw e;
     }
 
+    employeeData.profile = getSelectedValues('[name=profile]').pop();
+    employeeData.gender = getSelectedValues('[name=gender]').pop();
+    employeeData.department = getSelectedValues('[name=department]');
     employeeData.salary = getInputValueById('#salary');
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " + getInputValueById('#year');
     employeeData.date = Date.parse(date);
@@ -141,45 +143,66 @@ const createEmployeePayrollData = () =>{
     return employeeData;
 }
 
+const getSelectedValues = (propertyValue) => {
+    let allItems = document.querySelectorAll(propertyValue);
+    let selectedItems = [];
+    allItems.forEach(item => {
+        if(item.checked)
+        {
+            selectedItems.push(item.value);
+        }
+    });
+    return selectedItems;
+}
+
 const getInputValueById = (id) => {
     let value = document.querySelector(id).value;
     return value;
 }
 
-/*uc10 */
-const name = document.querySelector('#name');
-const textError = document.querySelector('.text-error');
-name.addEventListener('input', function(){
-    if(name.value.length == 0)
-    {
-        textError.textContent = "";
-        return;
-    }
-    
-    try
-    {
-        let employee = new Employee();
-        employee.name = name.value;
-        textError.textContent = "";
-    }
-    catch(e)
-    {
-        textError.textContent = e;
-    }
-});
+window.addEventListener('DOMContentLoaded', (event) => {
 
-const date = document.querySelector('#date');
-const dateError = document.querySelector('.date-error');
-date.addEventListener('input', function() {
-    const startDate = new Date(Date.parse(getInputValueById('#day') + " " + getInputValueById('#month')+" "+getInputValueById('#year')));
-    try
-    {
-        let employee = new Employee();
-        employee.startDate = startDate;
-        dateError.textContent = "";
-    }
-    catch(e)
-    {
-        dateError.textContent = e;
-    }
+    const salary = document.querySelector('#salary');
+    const output = document.querySelector('.salary-output');
+    output.textContent = salary.value;
+    salary.addEventListener('input', function(){
+        output.textContent = salary.value;
+    });    
+
+    const name = document.querySelector('#name');
+    const textError = document.querySelector('.text-error');
+    name.addEventListener('input', function(){
+        if(name.value.length == 0)
+        {
+            textError.textContent = "";
+            return;
+        }
+        
+        try
+        {
+            let employee = new Employee();
+            employee.name = name.value;
+            textError.textContent = "";
+        }
+        catch(e)
+        {
+            textError.textContent = e;
+        }
+    });
+
+    const date = document.querySelector('#date');
+    const dateError = document.querySelector('.date-error');
+    date.addEventListener('input', function() {
+        const startDate = new Date(Date.parse(getInputValueById('#day') + " " + getInputValueById('#month')+" "+getInputValueById('#year')));
+        try
+        {
+            let employee = new Employee();
+            employee.startDate = startDate;
+            dateError.textContent = "";
+        }
+        catch(e)
+        {
+            dateError.textContent = e;
+        }
+    });
 });
