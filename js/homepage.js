@@ -1,4 +1,7 @@
+let employeePayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
+    employeePayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector('.emp-count').textContent = employeePayrollList.length;
     createInnerHtml();
 });
 
@@ -6,7 +9,7 @@ const createInnerHtml = () => {
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th>" +
                         "<th>Salary</th><th>Start Date</th><th>Actions</th>";
     let innerHtml = `${headerHtml}`;
-    let employeePayrollList = createEmployeePayrollJSON();
+    if(employeePayrollList.length == 0) return;
     for(const employeePayrollData of employeePayrollList)
     {
         innerHtml = `${innerHtml}
@@ -27,41 +30,15 @@ const createInnerHtml = () => {
     document.querySelector('#table-display').innerHTML = innerHtml;
 }
 
-createEmployeePayrollJSON = () =>{
-    let employeePayrollList = [
-        {
-            _name : 'Maria',
-            _gender: 'Female',
-            _department: [
-                'HR',
-                'Finance'
-            ],
-            _salary: '400000',
-            _startDate: '1 October 2020',
-            _note: '',
-            _id: new Date().getTime(),
-            _profilePic:  '../assets/profile-images/Ellipse 1.png'
-        },
-        {
-            _name : 'Rafel',
-            _gender: 'Male',
-            _department: [
-                'Engineering'
-            ],
-            _salary: '400000',
-            _startDate: '1 November 2020',
-            _note: '',
-            _id: new Date().getTime(),
-            _profilePic:  '../assets/profile-images/Ellipse -5.png'
-        }
-    ];
-    return employeePayrollList;
-} 
-
 const getDeptHtml = (deptList) => {
-    let deptHtml ='';
+    let deptHtml =``;
     for (const dept of deptList){
         deptHtml = `${deptHtml}<div class = "dept-label">${dept}</div>`;
     }
     return deptHtml;
+}
+
+const getEmployeePayrollDataFromStorage = () =>{
+    console.log(JSON.parse(localStorage.getItem('EmployeePayrollList')));
+    return localStorage.getItem('EmployeePayrollList') ? JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
 }
